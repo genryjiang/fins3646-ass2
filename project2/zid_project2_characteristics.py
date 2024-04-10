@@ -9,7 +9,11 @@
 # Note: please keep the aliases consistent throughout the project.
 #       For details, review the import statements in zid_project2_main.py
 
-# <COMPLETE THIS PART>
+import sys
+import numpy as np
+import pandas as pd
+import util
+import unittest
 
 
 # ----------------------------------------------------------------------------------------
@@ -71,7 +75,7 @@ def vol_input_sanity_check(ret, cha_name, ret_freq_use: list):
 # ----------------------------------------------------------------------------
 # Part 5.4: Complete the vol_cal function
 # ----------------------------------------------------------------------------
-def vol_cal(ret, cha_name, ret_freq_use: list):
+def vol_cal(ret: dict, cha_name: str, ret_freq_use: list) -> pd.DataFrame:
     """
     This function calculates the monthly total return volatility for stocks.
     It extracts daily return series, as specified by ret_freq_use, from the input dictionary named `ret`.
@@ -401,6 +405,32 @@ def _test_cha_main(ret, cha_name, ret_freq_use):
 
     return df_cha_f
 
+class FunctionalityTests(unittest.TestCase):
+
+    def test_vol_cal(self):
+        # Object test (ensure object is a DataFrame and has correct shape, index and name)
+        ret_dict = _test_ret_dict_gen()
+        df_cha = vol_cal(ret_dict, 'vol', ['Daily',])
+        self.assertIsInstance(df_cha, pd.DataFrame)
+        self.assertEqual(df_cha.index.freq, 'M')
+        self.assertEqual(df_cha.shape, (3, 2))  # Adjusted to match the expected DataFrame shape
+
+        # Should replicate the expected output found for vol_cal in the docstring (see below)
+        '''
+                  aapl_vol  tsla_vol
+        Year_Month
+        2010-06   0.019396       NaN
+        2010-07   0.015031  0.065355
+        2010-08   0.012806  0.033770
+        '''
+
+        data = {
+            'aapl_vol': [0.019396, 0.015031, 0.012806],
+            'tsla_vol': [None, 0.065355, 0.033770]
+        }
+        index = pd.PeriodIndex(['2010-06', '2010-07', '2010-08'], freq='M', name='Year_Month')
+        df = pd.DataFrame(data, index=index)
+        pd.testing.assert_frame_equal(df_cha, df)
 
 if __name__ == "__main__":
     pass

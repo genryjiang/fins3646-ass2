@@ -1,6 +1,6 @@
 """ config.py
 
-Configuration options for the project2 package         
+Configuration options for the project2 package
 
 """
 # IMPORTANT: Please do NOT modify this file
@@ -39,12 +39,11 @@ TICMAP = {
         'V'      : 'Visa Inc.',
         }
 TICKERS = sorted(TICMAP.keys())
-    
-# -------------------------------------------------------- 
+# --------------------------------------------------------
 #   Aux function to process col names
 # --------------------------------------------------------
 def standardise_colnames(df):
-    """ Renames the columns in `df` so that 
+    """ Renames the columns in `df` so that
     - Names are lower case
     - Spaces are replaced with '_'
 
@@ -87,7 +86,7 @@ def standardise_colnames(df):
         # 2) column name is not properly formatted but exists in the dataframe
         #   => Include '_' prefix
         # 3) Else: return formatted name
-        if new_name == colname: 
+        if new_name == colname:
             # Returns original column
             return colname
         elif new_name in cols:

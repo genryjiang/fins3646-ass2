@@ -21,7 +21,9 @@
 # Create import statements so that the module config.py and util.py (inside the project2 package)
 # are imported as "cfg", and "util"
 #
-# <COMPLETE THIS PART>
+
+import config as cfg
+import util as util
 
 
 # We've imported other needed scripts and defined aliases. Please keep using the same aliases for them in this project.
