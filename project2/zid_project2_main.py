@@ -328,6 +328,7 @@ Q10_ANSWER = '?'
 # Please replace the '?' of ls_bar, ls_t and n_obs variables below
 # with the respective values of the 'ls' column in EW_LS_pf_df from Part 8,
 # keep 4 decimal places if it is not an integer:
+# Remove this if needed.
 ls_bar = '?'
 ls_t = '?'
 n_obs = '?'
@@ -335,8 +336,47 @@ n_obs = '?'
 # ls_t = '1.3847'
 # n_obs = '235'
 
-# <ADD THE t_stat FUNCTION HERE>
+def t_stat(df, column_name):
+    """
+    Calculate the mean (average), t-statistic and number of observations for a column in a DataFrame.
 
+    Parameters
+    ----------
+    df : pandas DataFrame
+        Input DataFrame containing the column of interest.
+    column_name : str
+        Name of the column for which to calculate the t-statistic,
+        average and number of observations.
+
+    Returns
+    -------
+    pandas DataFrame
+        DataFrame containing the calculated statistics:
+        - 'ls_bar': Mean of the specified column.
+        - 'ls_t': t-statistic of the specified column.
+        - 'n_obs': Number of non-null observations in the specified column.
+
+    """
+    # Calculate mean of the column
+    ls_bar = df[column_name].mean()
+
+    # Calculate standard error of the mean
+    std_error = df[column_name].std() / np.sqrt(df[column_name].count())
+
+    # Calculate t-statistic
+    ls_t = ls_bar / std_error
+
+    # Number of observations
+    n_obs = df[column_name].count()
+
+    # Create DataFrame to store results
+    res = pd.DataFrame({
+        'ls_bar': [ls_bar],
+        'ls_t': [ls_t],
+        'n_obs': [n_obs]
+    })
+
+    return res
 
 # ----------------------------------------------------------------------------
 # Part 10: project 2 mini-presentation

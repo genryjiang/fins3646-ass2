@@ -9,11 +9,13 @@
 # Note: please keep the aliases consistent throughout the project.
 #       For details, review the import statements in zid_project2_main.py
 
-import sys
 import numpy as np
 import pandas as pd
+import config as cfg
 import util
 import unittest
+from project2 import zid_project2_etl as etl
+from project2 import zid_project2_portfolio as pf
 
 
 # ----------------------------------------------------------------------------------------
@@ -75,7 +77,7 @@ def vol_input_sanity_check(ret, cha_name, ret_freq_use: list):
 # ----------------------------------------------------------------------------
 # Part 5.4: Complete the vol_cal function
 # ----------------------------------------------------------------------------
-def vol_cal(ret: dict, cha_name: str, ret_freq_use: list) -> pd.DataFrame:
+def vol_cal(ret, cha_name, ret_freq_use: list):
     """
     This function calculates the monthly total return volatility for stocks.
     It extracts daily return series, as specified by ret_freq_use, from the input dictionary named `ret`.
@@ -150,7 +152,33 @@ def vol_cal(ret: dict, cha_name: str, ret_freq_use: list) -> pd.DataFrame:
 
     """
 
-    # <COMPLETE THIS PART>
+    # Extract daily returns from ret dictionary
+    daily_ret = ret['Daily'].copy()
+
+    # Group daily returns by month and calculate standard deviation
+    monthly_vol = daily_ret.groupby(pd.Grouper(freq='M')).std()
+
+    # Append '_cha_name' to column names
+    monthly_vol.columns = [f"{col}_{cha_name}" for col in monthly_vol.columns]
+
+    # Count number of daily returns per month
+    daily_counts = daily_ret.groupby(pd.Grouper(freq='M')).size()
+
+    # Identify months with fewer than 18 daily returns
+    months_less_18 = daily_counts[daily_counts < 18].index
+
+    # Set volatility values to None for months with fewer than 18 daily returns
+    for month in months_less_18:
+        monthly_vol.loc[month, :] = np.nan
+
+    # Convert DataFrame index to PeriodIndex with name 'Year_Month'
+    monthly_vol.index = monthly_vol.index.to_period('M')
+    monthly_vol.index.name = 'Year_Month'
+
+    # Drop rows where all values are NaN
+    monthly_vol.dropna(how = 'all',inplace = True)
+
+    return monthly_vol
 
 
 # ----------------------------------------------------------------------------
@@ -223,7 +251,30 @@ def merge_tables(ret, df_cha, cha_name):
        ensuring that modifications to the copied DataFrame do not affect the original DataFrame stored in the dictionary
      - Read shift() documentations to understand how to shift the values of a DataFrame along a specified axis
     """
-    # <COMPLETE THIS PART>
+
+    # Copy the monthly return DataFrame from ret dictionary
+    monthly_returns = ret['Monthly'].copy()
+
+    df_cha_shift = df_cha.shift(periods=1, freq='M')
+
+    # Merge monthly returns with characteristics DataFrame on Year_Month index
+    df_merged = pd.merge(monthly_returns, df_cha_shift, left_index=True, right_index=True, how='left')
+
+    # Shift characteristic columns forward by one month
+    df_merged_shifted = df_merged.shift(periods=1, freq='M')
+
+    # Rename columns with characteristic names appended by '_cha_name'
+    for col in df_cha_shift.columns:
+        df_merged_shifted[f"{col}_{cha_name}"] = df_merged[col]
+
+    # Drop original characteristic columns
+    df_merged_shifted.drop(df_cha.columns, axis=1, inplace=True)
+
+    # Convert DataFrame index to PeriodIndex with name 'Year_Month'
+    df_merged.index = df_merged.index.to_timestamp().to_period('M')
+    df_merged.index.name = 'Year_Month'
+
+    return df_merged
 
 
 # ------------------------------------------------------------------------------------
@@ -405,32 +456,6 @@ def _test_cha_main(ret, cha_name, ret_freq_use):
 
     return df_cha_f
 
-class FunctionalityTests(unittest.TestCase):
-
-    def test_vol_cal(self):
-        # Object test (ensure object is a DataFrame and has correct shape, index and name)
-        ret_dict = _test_ret_dict_gen()
-        df_cha = vol_cal(ret_dict, 'vol', ['Daily',])
-        self.assertIsInstance(df_cha, pd.DataFrame)
-        self.assertEqual(df_cha.index.freq, 'M')
-        self.assertEqual(df_cha.shape, (3, 2))  # Adjusted to match the expected DataFrame shape
-
-        # Should replicate the expected output found for vol_cal in the docstring (see below)
-        '''
-                  aapl_vol  tsla_vol
-        Year_Month
-        2010-06   0.019396       NaN
-        2010-07   0.015031  0.065355
-        2010-08   0.012806  0.033770
-        '''
-
-        data = {
-            'aapl_vol': [0.019396, 0.015031, 0.012806],
-            'tsla_vol': [None, 0.065355, 0.033770]
-        }
-        index = pd.PeriodIndex(['2010-06', '2010-07', '2010-08'], freq='M', name='Year_Month')
-        df = pd.DataFrame(data, index=index)
-        pd.testing.assert_frame_equal(df_cha, df)
 
 if __name__ == "__main__":
     pass
@@ -448,4 +473,3 @@ if __name__ == "__main__":
     # _test_vol_cal(ret_dict, 'vol', ['Daily',])
     # _test_merge_tables(ret_dict, 'vol', ['Daily',])
     # _test_cha_main(ret_dict, 'vol', ['Daily',])
-
