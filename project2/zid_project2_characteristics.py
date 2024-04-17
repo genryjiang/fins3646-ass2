@@ -18,63 +18,6 @@ from project2 import zid_project2_etl as etl
 from project2 import zid_project2_portfolio as pf
 
 
-# ------------------------------------------------------------------------------------
-# Part 5.2: Read the cha_main function and understand the workflow in this script
-# ------------------------------------------------------------------------------------
-def cha_main(ret, cha_name, ret_freq_use: list):
-    """Function to show work flow. This script is to calculate stock total volatility
-       using daily return table and merge it with monthly return table.
-
-    This function performs a few steps to construct characteristics:
-    1. Call `vol_input_sanity_check` function to check the sanity of inputs to ensure
-       they meet required formats and constraints.
-    2. Call `vol_cal` function to calculate the stock characteristics.
-    3. Call `merge_tables` function to merge step 2 output and monthly return table together
-
-    Parameters
-    ----------
-    ret : dict
-        A dictionary containing two items, where each item is a DataFrame that provides daily and monthly returns.
-        See the docstring of the `aj_ret_dict` function in zid_project2_etl.py for a description of this dictionary.
-
-    cha_name  :  str
-        The name of the characteristic being calculated. In this project we will only calculate stock total volatility.
-        So, set this parameter as 'vol', the short name for total volatility here.
-
-    ret_freq_use  :  list
-        It identifies that which frequency returns you will use in this function.
-        Set it as ['Daily',] when calculating stock total volatility here.
-
-    Returns
-    -------
-    df
-        A merged DataFrame with a Monthly frequency PeriodIndex, containing rows for each year-month that
-        include the stock monthly returns for that period and the characteristics, i.e., total volatility,
-        from the previous year-month.
-        - df.columns: All columns in the monthly return dataframe within `ret` dictionary generated from
-          etl script and characteristics table, `df_cha`, generated from vol_cal function.
-        - df.index: Monthly frequency PeriodIndex with name of 'Year_Month'.
-          It contains all PeriodIndex year-month of the monthly returns data frame.
-
-    Raises
-    -------
-        - Custom exceptions or errors if the sanity check fails or if any part of the characteristic calculation
-          or merging process encounters issues.
-
-    Note:
-        The function assumes that `vol_input_sanity_check`, `vol_cal`, and `merge_tables` are defined elsewhere
-        in the module with appropriate logic to handle the inputs and outputs as described.
-    """
-    # sanity check for inputs
-    vol_input_sanity_check(ret, cha_name, ret_freq_use)
-
-    # obtain monthly stock volatility values
-    monthly_vol = vol_cal(ret, cha_name, ret_freq_use)
-
-    # merge return and volatility data
-    df_merged = merge_tables(ret, monthly_vol, cha_name)
-
-    return df_merged
 
 
 # ----------------------------------------------------------------------------------------
@@ -383,7 +326,16 @@ def cha_main(ret, cha_name, ret_freq_use: list):
         The function assumes that `vol_input_sanity_check`, `vol_cal`, and `merge_tables` are defined elsewhere
         in the module with appropriate logic to handle the inputs and outputs as described.
     """
-    # <COMPLETE THIS PART>
+    # sanity check for inputs
+    vol_input_sanity_check(ret, cha_name, ret_freq_use)
+
+    # obtain monthly stock volatility values
+    monthly_vol = vol_cal(ret, cha_name, ret_freq_use)
+
+    # merge return and volatility data
+    df_merged = merge_tables(ret, monthly_vol, cha_name)
+
+    return df_merged
 
 
 def _test_ret_dict_gen():
