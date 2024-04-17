@@ -20,7 +20,7 @@
 # ----------------------------------------------------------------------------
 # Create import statements so that the module config.py and util.py (inside the project2 package)
 # are imported as "cfg", and "util"
-#
+
 
 import config as cfg
 import util as util
@@ -169,7 +169,13 @@ def get_avg(df: pd.DataFrame, year):
         dtype: float64
 
     """
-    # <COMPLETE THIS PART>
+    # filter for all observations in a given year
+    filtered_df = df[df.index.year == year]
+
+    # calculate the average value of each column
+    avg_series = filtered_df.mean(axis=0)
+
+    return avg_series
 
 
 def get_cumulative_ret(df):
@@ -197,47 +203,10 @@ def get_cumulative_ret(df):
         where r1, ..., rN represents monthly returns
 
     """
-    # <COMPLETE THIS PART>
+    # calculate the cumulative return
+    cumulative_returns = (1 + df).cumprod() - 1
 
-
-# ----------------------------------------------------------------------------
-# Part 8: Answer questions
-# ----------------------------------------------------------------------------
-# NOTES:
-#
-# - THE SCRIPTS YOU NEED TO SUBMIT ARE
-#   zid_project2_main.py, zid_project2_etl.py, and zid_project2_characteristics.py
-#
-# - Do not create any other functions inside the scripts you need to submit unless
-#   we ask you to do so.
-#
-# - For this part of the project, only the answers provided below will be
-#   marked. You are free to create any function you want (IN A SEPARATE
-#   MODULE outside the scripts you need to submit).
-#
-# - All your answers should be strings. If they represent a number, include 4
-#   decimal places unless otherwise specified in the question description
-#
-# - Here is an example of how to answer the questions below. Consider the
-#   following question:
-#
-#   Q0: Which ticker included in config.TICMAP starts with the letter "C"?
-#   Q0_answer = '?'
-#
-#   You should replace the '?' with the correct answer:
-#   Q0_answer = 'CSCO'
-#
-#
-#     To answer the questions below, you need to run portfolio_main function in this script
-#     with the following parameter values:
-#     tickers: all tickers included in the dictionary config.TICMAP,
-#     start: '2000-12-29',
-#     end: '2021-08-31',
-#     cha_name: 'vol'.
-#     ret_freq_use: ['Daily',],
-#     q: 3
-#     Please name the three output files as DM_Ret_dict, Vol_Ret_mrg_df, EW_LS_pf_df.
-#     You can utilize the three output files and auxiliary functions to answer the questions.
+    return cumulative_returns
 
 
 # ----------------------------------------------------------------------------
@@ -368,7 +337,6 @@ Q10_ANSWER = '1.1799'
 # Please replace the '?' of ls_bar, ls_t and n_obs variables below
 # with the respective values of the 'ls' column in EW_LS_pf_df from Part 8,
 # keep 4 decimal places if it is not an integer:
-# Remove this if needed.
 ls_bar = '?'
 ls_t = '?'
 n_obs = '?'
@@ -376,60 +344,21 @@ n_obs = '?'
 # ls_t = '1.3847'
 # n_obs = '235'
 
-def t_stat(df, column_name):
-    """
-    Calculate the mean (average), t-statistic and number of observations for a column in a DataFrame.
+# <ADD THE t_stat FUNCTION HERE>
 
-    Parameters
-    ----------
-    df : pandas DataFrame
-        Input DataFrame containing the column of interest.
-    column_name : str
-        Name of the column for which to calculate the t-statistic,
-        average and number of observations.
-
-    Returns
-    -------
-    pandas DataFrame
-        DataFrame containing the calculated statistics:
-        - 'ls_bar': Mean of the specified column.
-        - 'ls_t': t-statistic of the specified column.
-        - 'n_obs': Number of non-null observations in the specified column.
-
-    """
-    # Calculate mean of the column
-    ls_bar = df[column_name].mean()
-
-    # Calculate standard error of the mean
-    std_error = df[column_name].std() / np.sqrt(df[column_name].count())
-
-    # Calculate t-statistic
-    ls_t = ls_bar / std_error
-
-    # Number of observations
-    n_obs = df[column_name].count()
-
-    # Create DataFrame to store results
-    res = pd.DataFrame({
-        'ls_bar': [ls_bar],
-        'ls_t': [ls_t],
-        'n_obs': [n_obs]
-    })
-
-    return res
 
 # ----------------------------------------------------------------------------
 # Part 10: project 2 mini-presentation
 # ----------------------------------------------------------------------------
 # In this part, you are going to record and present a strictly less than 15 minutes long presentation.
 # You should seek to briefly describe:
-# 1.	What are the null and alternative hypotheses that the project 2 is testing
-# 2.	What’s the methodology of the portfolio construction
+# 1.   What are the null and alternative hypotheses that the project 2 is testing
+# 2.   What’s the methodology of the portfolio construction
 #       and how is it implemented in Project 2 codebase?
-# 3.	What inferences can we draw from the output of Part 9,
+# 3.   What inferences can we draw from the output of Part 9,
 #       including the average return and t-stats of the long-short portfolio?
-# 4.	Do you think the results are reliable? Why or why not?
-# 5.	Is there any further work you would like to pursue based on Project 2?
+# 4.   Do you think the results are reliable? Why or why not?
+# 5.   Is there any further work you would like to pursue based on Project 2?
 #       Share your to-do list.
 #
 # For this mini-presentation, it is up to the group to decide whether all the members
@@ -501,9 +430,3 @@ def _test_get_cumulative_ret():
 
 if __name__ == "__main__":
     pass
-
-
-
-
-
-
