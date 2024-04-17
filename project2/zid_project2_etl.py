@@ -103,7 +103,6 @@ def read_prc_csv(tic: str, start: str, end: str, prc_col='Adj Close') -> pd.Seri
     # tic is lowercase
     tic = tic.lower();
     # pull data from csv using pandas and using cfg.DATADIR
-    print(cfg.DATADIR)
     df = pd.read_csv(f'{cfg.DATADIR}/{tic}_prc.csv', index_col='Date', parse_dates=True)
     start = pd.to_datetime(start)
     end = pd.to_datetime(end)
@@ -121,6 +120,8 @@ def read_prc_csv(tic: str, start: str, end: str, prc_col='Adj Close') -> pd.Seri
     # Sort dates in ascending order
     convertedSeries = convertedSeries.sort_index(ascending=True)
     return convertedSeries
+
+
 
 # ----------------------------------------------------------------------------
 # Part 4.3: Complete the daily_return_cal function

@@ -240,18 +240,58 @@ def get_cumulative_ret(df):
 #     You can utilize the three output files and auxiliary functions to answer the questions.
 
 
+# ----------------------------------------------------------------------------
+# Part 8: Answer questions
+# ----------------------------------------------------------------------------
+# NOTES:
+#
+# - THE SCRIPTS YOU NEED TO SUBMIT ARE
+#   zid_project2_main.py, zid_project2_etl.py, and zid_project2_characteristics.py
+#
+# - Do not create any other functions inside the scripts you need to submit unless
+#   we ask you to do so.
+#
+# - For this part of the project, only the answers provided below will be
+#   marked. You are free to create any function you want (IN A SEPARATE
+#   MODULE outside the scripts you need to submit).
+#
+# - All your answers should be strings. If they represent a number, include 4
+#   decimal places unless otherwise specified in the question description
+#
+# - Here is an example of how to answer the questions below. Consider the
+#   following question:
+#
+#   Q0: Which ticker included in config.TICMAP starts with the letter "C"?
+#   Q0_answer = '?'
+#
+#   You should replace the '?' with the correct answer:
+#   Q0_answer = 'CSCO'
+#
+#
+#     To answer the questions below, you need to run portfolio_main function in this script
+#     with the following parameter values:
+#     tickers: all tickers included in the dictionary config.TICMAP,
+#     start: '2000-12-29',
+#     end: '2021-08-31',
+#     cha_name: 'vol'.
+#     ret_freq_use: ['Daily',],
+#     q: 3
+#     Please name the three output files as DM_Ret_dict, Vol_Ret_mrg_df, EW_LS_pf_df.
+#     You can utilize the three output files and auxiliary functions to answer the questions.
+
+
 # Q1: Which stock in your sample has the lowest average daily return for the
 #     year 2008 (ignoring missing values)? Your answer should include the
 #     ticker for this stock.
 #     Use the output dictionary, DM_Ret_dict, and auxiliary function in this script
 #     to do the calculation.
-Q1_ANSWER = '?'
+Q1_ANSWER = 'nvda'
 
 
 # Q2: What is the daily average return of the stock in question 1 for the year 2008.
 #     Use the output dictionary, DM_Ret_dict, and auxiliary function in this script
 #     to do the calculation.
-Q2_ANSWER = '?'
+Q2_ANSWER = '-0.0042'
 
 
 # Q3: Which stock in your sample has the highest average monthly return for the
@@ -259,26 +299,26 @@ Q2_ANSWER = '?'
 #     ticker for this stock.
 #     Use the output dictionary, DM_Ret_dict, and auxiliary function in this script
 #     to do the calculation.
-Q3_ANSWER = '?'
+Q3_ANSWER = 'aapl'
 
 
 # Q4: What is the average monthly return of the stock in question 3 for the year 2019.
 #     Use the output dictionary, DM_Ret_dict, and auxiliary function in this script
 #     to do the calculation.
-Q4_ANSWER = '?'
+Q4_ANSWER = '0.0566'
 
 
 # Q5: What is the average monthly total volatility for stock 'TSLA' in the year 2010?
 #     Use the output dataframe, Vol_Ret_mrg_df, and auxiliary function in this script
 #     to do the calculation.
-Q5_ANSWER = '?'
+Q5_ANSWER = '0.0414'
 
 
 # Q6: What is the ratio of the average monthly total volatility for stock 'V'
 #     in the year 2008 to that in the year 2018? Keep 1 decimal places.
 #     Use the output dataframe, Vol_Ret_mrg_df, and auxiliary function in this script
 #     to do the calculation.
-Q6_ANSWER = '?'
+Q6_ANSWER = '2.9'
 
 
 # Q7: How many effective year-month for stock 'TSLA' in year 2010. An effective year-month
@@ -286,27 +326,27 @@ Q6_ANSWER = '?'
 #     are not null.
 #     Use the output dataframe, Vol_Ret_mrg_df, to do the calculation.
 #     Answer should be an integer
-Q7_ANSWER = '?'
+Q7_ANSWER = '5'
 
 
 # Q8: How many rows and columns in the EW_LS_pf_df data frame?
 #     Answer should be two integer, the first represent number of rows and the two numbers need to be
 #     separated by a comma.
-Q8_ANSWER = '?'
+Q8_ANSWER = '234, 4'
 
 
 # Q9: What is the average equal weighted portfolio return of the quantile with the
 #     lowest total volatility for the year 2019?
 #     Use the output dataframe, EW_LS_pf_d, and auxiliary function in this script
 #     to do the calculation.
-Q9_ANSWER = '?'
+Q9_ANSWER = '0.0195'
 
 
 # Q10: What is the cumulative portfolio return of the total volatility long-short portfolio
 #      over the whole sample period?
 #      Use the output dataframe, EW_LS_pf_d, and auxiliary function in this script
 #     to do the calculation.
-Q10_ANSWER = '?'
+Q10_ANSWER = '1.1799'
 
 
 # ----------------------------------------------------------------------------
