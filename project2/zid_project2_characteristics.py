@@ -14,8 +14,8 @@ import numpy as np
 import pandas as pd
 import config as cfg
 import util
-from project2 import zid_project2_etl as etl
-from project2 import zid_project2_portfolio as pf
+import zid_project2_etl as etl
+import zid_project2_portfolio as pf
 
 
 

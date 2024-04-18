@@ -359,6 +359,9 @@ def t_stat(df, column_name):
         'n_obs': [n_obs]
     })
 
+    return res
+
+
 
 # ----------------------------------------------------------------------------
 # Part 10: project 2 mini-presentation
