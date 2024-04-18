@@ -22,6 +22,7 @@
 # are imported as "cfg", and "util"
 
 
+import numpy as np
 import config as cfg
 import util as util
 
@@ -318,33 +319,45 @@ Q9_ANSWER = '0.0195'
 Q10_ANSWER = '1.1799'
 
 
-# ----------------------------------------------------------------------------
-# Part 9: Add t_stat function
-# ----------------------------------------------------------------------------
-# We've outputted EW_LS_pf_df file and save the total volatility long-short portfolio
-# in 'ls' column from Part 8.
+def t_stat(df, column_name):
+    """
+    Calculate the mean (average), t-statistic and number of observations for a column in a DataFrame.
 
-# Please add an auxiliary function called ‘t_stat’ below.
-# You can design the function's parameters and output table.
-# But make sure it can be used to output a DataFrame including three columns:
-# 1.ls_bar, the mean of 'ls' columns in EW_LS_pf_df
-# 2.ls_t, the t stat of 'ls' columns in EW_LS_pf_df
-# 3.n_obs, the number of observations of 'ls' columns in EW_LS_pf_df
+    Parameters
+    ----------
+    df : pandas DataFrame
+        Input DataFrame containing the column of interest.
+    column_name : str
+        Name of the column for which to calculate the t-statistic,
+        average and number of observations.
 
-# Notes:
-# Please add the function in zid_project2_main.py.
-# The name of the function should be t_stat and including docstring.
-# Please replace the '?' of ls_bar, ls_t and n_obs variables below
-# with the respective values of the 'ls' column in EW_LS_pf_df from Part 8,
-# keep 4 decimal places if it is not an integer:
-ls_bar = '?'
-ls_t = '?'
-n_obs = '?'
-# ls_bar = '0.0073'
-# ls_t = '1.3847'
-# n_obs = '235'
+    Returns
+    -------
+    pandas DataFrame
+        DataFrame containing the calculated statistics:
+        - 'ls_bar': Mean of the specified column.
+        - 'ls_t': t-statistic of the specified column.
+        - 'n_obs': Number of non-null observations in the specified column.
 
-# <ADD THE t_stat FUNCTION HERE>
+    """
+    # Calculate mean of the column
+    ls_bar = df[column_name].mean()
+
+    # Calculate standard error of the mean
+    std_error = df[column_name].std() / np.sqrt(df[column_name].count())
+
+    # Calculate t-statistic
+    ls_t = ls_bar / std_error
+
+    # Number of observations
+    n_obs = df[column_name].count()
+
+    # Create DataFrame to store results
+    res = pd.DataFrame({
+        'ls_bar': [ls_bar],
+        'ls_t': [ls_t],
+        'n_obs': [n_obs]
+    })
 
 
 # ----------------------------------------------------------------------------
